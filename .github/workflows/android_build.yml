@@ -20,14 +20,16 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Set up Android SDK
+    - name: Set up Android SDK and Gradle
       uses: android-actions/setup-android@v3
       with:
         api-level: 34
-        build-tools: 34.0.0 # تأكد أن هذا يطابق compileSdk في build.gradle
-        ndk: 25.1.8937393 # مطلوب لـ cryptography إذا كنت ستستخدمها، يمكن حذفه مبدئيا
+        build-tools: 34.0.0
+        ndk: 25.1.8937393 # يمكنك إزالته إذا لم تكن تخطط لاستخدام مكتبات تحتاج NDK
 
     - name: Build debug APK
+      # بدلًا من تشغيل ./gradlew مباشرة، نستخدم 'gradlew' كأمر متاح في المسار
+      # وذلك لأن setup-android يضبط بيئة Gradle.
       run: ./gradlew assembleDebug
 
     - name: Upload APK
