@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4 # يسحب الكود من المستودع
+    - uses: actions/checkout@v4
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -20,8 +20,12 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 34
+        build-tools: 34.0.0 # تأكد أن هذا يطابق compileSdk في build.gradle
+        ndk: 25.1.8937393 # مطلوب لـ cryptography إذا كنت ستستخدمها، يمكن حذفه مبدئيا
 
     - name: Build debug APK
       run: ./gradlew assembleDebug
